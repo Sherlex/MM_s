@@ -1,0 +1,503 @@
+﻿<Window 
+    
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dataGrid2D="http://gu.se/DataGrid2D"
+        xmlns:lcu="http://schemas.arction.com/charting/ultimate/" 
+    xmlns:lcusb="http://schemas.arction.com/ChartingMVVM/ultimate/" 
+    xmlns:dg2d="clr-namespace:DataGrid2DLibrary;assembly=DataGrid2DLibrary" x:Class="MM_s.MainWindow"
+    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:msy="clr-namespace:MM_s"
+    xmlns:Key="DecimalConverter"
+        mc:Ignorable="d"
+        Title="MainWindow" Width="800" ResizeMode="CanResizeWithGrip" MinWidth="860" MinHeight="600" Loaded="Window_Loaded">
+    <Window.Resources>
+        <msy:DecimalConverter x:Key="mmConverter"></msy:DecimalConverter>
+    </Window.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="10"/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" x:Name="menu" HorizontalAlignment="Stretch" Height="23" VerticalAlignment="Top" >
+            <Separator/>
+            <MenuItem x:Name="GenerateReport" Header="Создать отчет" Click="MenuItem_Click"/>
+        </Menu>
+        <TabControl Grid.Row="1" x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <TabItem x:Name="Calculate" Header="Расчет" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer Grid.IsSharedSizeScope="True" CanContentScroll="True" >
+                    <Grid Background="#FFE5E5E5" Validation.Error="TextBox_Error">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5.0*"/>
+                            <RowDefinition Height="4.0*"/>
+                            <RowDefinition Height="3.0*"/>
+                            <RowDefinition Height="4.0*"/>
+                            <RowDefinition Height="4.0*"/>
+                            <RowDefinition Height="2.5*"/>
+                            <RowDefinition Height="2.5*"/>
+                            <RowDefinition Height="2.5*"/>
+                            <RowDefinition Height="4.0*"/>
+                            <RowDefinition Height="2.5*"/>
+                            <RowDefinition Height="2.5*"/>
+                            <RowDefinition Height="2.5*"/>
+                            <RowDefinition Height="2.5*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="label" Content="Механизм процесса" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontStyle="Italic" Margin="52,12,33,12" FontSize="14"/>
+                        <Image x:Name="image" Grid.Column="1" Height="40" Width="134" Source="ykyk.PNG" Margin="9,6,11,7"/>
+                        <Label x:Name="label1" Content="Геометрические параметры реактора" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" FontWeight="Bold" FontStyle="Italic" Margin="0" FontSize="14"/>
+                        <Label x:Name="label2" Content="Диаметр, м" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.Row="1" Margin="20,0,0,0" VerticalContentAlignment="Bottom"/>
+                        <Label x:Name="label3" Content="Длина, м" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.Row="2" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="D_textBox" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120" Margin="0" VerticalContentAlignment="Bottom">
+                            <TextBox.Text>
+                                <Binding Path="D" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True" >
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="D_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White"  FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <TextBox x:Name="L_textBox" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120" Grid.Row="2" Margin="17,0" VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="L" UpdateSourceTrigger="LostFocus"  ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True"  >
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="L_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <Label x:Name="label4" Content="Режимные параметры процесса" HorizontalAlignment="Center"  Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="2" FontWeight="Bold" FontStyle="Italic" Margin="0" FontSize="14"/>
+                        <Label x:Name="label5" Content="Расход потока через реактор, л/мин" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Grid.Column="2" Margin="10,0,0,0" VerticalContentAlignment="Bottom"/>
+                        <Label x:Name="label6" Content="Температура смеси в реакторе, °C" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Grid.Column="2" Margin="10,0,0,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="T_textBox" Grid.Column="3" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120" Margin="17.4,0,16.6,0" VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="T" UpdateSourceTrigger="LostFocus"  ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="T_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10" Margin="0,0,40,0" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <TextBox x:Name="Q_textBox" Grid.Column="3" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120" Margin="0" VerticalContentAlignment="Bottom">
+                            <TextBox.Text>
+                                <Binding Path="Q" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="Q_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10" HorizontalAlignment="Left" Padding="0,0,40,0"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <Label x:Name="label7" Content="Варьируемый технологический параметр" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="4" FontWeight="Bold" FontStyle="Italic" Margin="0" FontSize="14"/>
+                        <Label x:Name="label8" Content="Входная концентрация компонента А, моль/л" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Margin="20,0,0,0" VerticalContentAlignment="Bottom"/>
+                        <TextBox x:Name="CAin_textBox" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120" Margin="55,0,55.6,0" VerticalContentAlignment="Bottom">
+                            <TextBox.Text>
+                                <Binding Path="CAin" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="CAin_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <Label x:Name="label9" Content="Эмпирические коэффициенты модели - кинетические параметры процесса" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Grid.ColumnSpan="4" FontWeight="Bold" FontStyle="Italic" Margin="112,0,111.6,0" FontSize="14"/>
+
+                        <Label x:Name="label10" Content="Предэкспоненциальный множитель для константы скорости первой реакции, 1/мин • 10¹¹" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Margin="20,31,0,3" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom"/>
+                        <TextBox x:Name="k01_textBox" Grid.Column="3" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="17.4,35,16.6,7" VerticalContentAlignment="Bottom">
+                            <TextBox.Text>
+                                <Binding Path="k01" UpdateSourceTrigger="LostFocus"  ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="k01_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10" Margin="0,0,40,0" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <Label x:Name="label11" Content="Энергия активации первой реакции, Дж/моль" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="Ea1_textBox" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="6" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="55,4,55.6,4" VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="Ea1" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="Ea1_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <Label x:Name="label12" Content="Предэкспоненциальный множитель для константы скорости второй реакции, 1/мин • 10¹¹" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" Margin="20,0,0,0" Grid.ColumnSpan="3" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="k02_textBox" Grid.Column="3" HorizontalAlignment="Center" Grid.Row="5" TextWrapping="Wrap" Width="120" VerticalAlignment="Center" Margin="17.4,0,16.6,0" VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="k02" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel>
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="k02_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10" Margin="0,0,40,0" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <Label x:Name="label13" Content="Энергия активации второй реакции, Дж/моль" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="20,0,0,0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="Ea2_textBox" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="7" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Margin="55,0,55.6,0" VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="Ea2" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="Ea2_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+
+                        <Button x:Name="button" Content="Рассчитать" Grid.Row="12" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14" Click="button_Click" Grid.Column="3" Margin="0">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FF1BD9E2" Offset="0.234"/>
+                                    <GradientStop Color="#FFB65CE0" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                        <Label x:Name="label14" Content="Параметры метода решений уравнений" HorizontalAlignment="Center" Grid.Row="8" VerticalAlignment="Top" Grid.ColumnSpan="4" FontSize="14" FontWeight="Bold" FontStyle="Italic" Margin="0"/>
+                        <Label x:Name="label15" Content="Начальный шаг сетки по длине реактора, м" HorizontalAlignment="Left" Margin="20,0,0,0" Grid.Row="8" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+                        <TextBox x:Name="deltaX0_textBox" Grid.Column="2" HorizontalAlignment="Center" Margin="0" Grid.Row="8" Width="120" VerticalAlignment="Bottom">
+                            <TextBox.Text>
+                                <Binding Path="DeltaX0" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="deltaX0_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <TextBox x:Name="Ku_textBox" Grid.Column="2" HorizontalAlignment="Center" Margin="0,0,1,0" Grid.Row="9" TextWrapping="Wrap" VerticalAlignment="Center" Width="120">
+                            <TextBox.Text>
+                                <Binding Path="Ku" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="Ku_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <TextBox x:Name="qmax_textBox" Grid.Column="2" HorizontalAlignment="Center" Margin="0" Grid.Row="10" TextWrapping="Wrap" VerticalAlignment="Center" Width="120">
+                            <TextBox.Text>
+                                <Binding Path="qMax" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="qmax_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <TextBox x:Name="Emax_textBox" Grid.Column="2" HorizontalAlignment="Center" Margin="55,0,56,4" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120">
+                            <TextBox.Text>
+                                <Binding Path="eMax" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="Emax_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <Label x:Name="label16" Content="Сеточное число Куранта" HorizontalAlignment="Left" Margin="20,0,0,0" Grid.Row="9" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                        <Label x:Name="label17" Content="Предельно допустимая погрешность расчета, %" HorizontalAlignment="Left" Margin="20,0,0,0" Grid.Row="11" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                        <Label x:Name="label19" Content="Максимальное число делений шагов сетки пополам" HorizontalAlignment="Left" Margin="20,0,0,0" Grid.Row="10" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                        <Label x:Name="label18" Content="Шаг расчёта по длине реактора, м" HorizontalAlignment="Left" Margin="20,0,0,0" Grid.Row="12" VerticalAlignment="Center" Grid.ColumnSpan="2" Visibility="Hidden"/>
+                        <TextBox x:Name="step_textBox" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="12" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Visibility="Hidden">
+                            <TextBox.Text>
+                                <Binding Path="step" UpdateSourceTrigger="LostFocus" ValidatesOnDataErrors="True" ValidatesOnExceptions="True" ValidatesOnNotifyDataErrors="True" NotifyOnValidationError="True">
+                                    <Binding.ValidationRules>
+                                        <msy:ValidateTextBoxRules Min="0"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <AdornedElementPlaceholder x:Name="step_textBox"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Background="White" FontSize="10" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
+                        </TextBox>
+                        <ProgressBar x:Name="StatusTable" Grid.Column="2" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="14" Width="248"/>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem x:Name="Result" Header="Результаты">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--<DataGrid x:Name="dataGrid" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>-->
+                    <!--<DataGrid x:Name="dataGrid" dataGrid2D:ItemsSource.Array2D="{Binding double2DArray}" />-->
+
+                    <dg2d:DataGrid2D x:Name="dataGrid2"
+                          
+                             AlternationCount="2"
+                             UseModifiedDataGridStyle="True"
+                             ItemsSource2D="{Binding double2DArray}"
+                             RowBackground="White"
+                             AlternatingRowBackground="#ebebeb"                       
+                             Background="Transparent">
+                    </dg2d:DataGrid2D>
+                    <Grid HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="label20" Content="Результаты расчета" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Top" Grid.ColumnSpan="4"/>
+                        <Label x:Name="label21" Content="S, м^2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center"/>
+                        <Label x:Name="label22" Content="u, м/мин" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
+                        <Label x:Name="label23" Content="k1, 1/мин" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center"/>
+                        <Label x:Name="label24" Content="k2, 1/мин" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" VerticalAlignment="Center"/>
+                        <Label x:Name="label25" Content="τR, мин" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="5" VerticalAlignment="Center"/>
+                        <Label x:Name="label26" Content="Θ, мин" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="6" VerticalAlignment="Center"/>
+                        <Label x:Name="label27" Content="M" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="7" VerticalAlignment="Center"/>
+                        <Label x:Name="label28" Content="CBmax" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center"/>
+                        <Label x:Name="label29" Content="Δx, м" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
+                        <Label x:Name="label30" Content="Δt, мин" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center"/>
+                        <Label x:Name="label31" Content="q" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" VerticalAlignment="Center"/>
+                        <Label x:Name="label32" Content="εa, моль/л" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="5" VerticalAlignment="Center"/>
+                        <Label x:Name="label33" Content="ε, %" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="6" VerticalAlignment="Center"/>
+                        <Label x:Name="label34" Content="N" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="7" VerticalAlignment="Center"/>
+                        <TextBox x:Name="S_textBox" Grid.Column="1" HorizontalAlignment="Center"  Margin="0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="u_textBox" Grid.Column="1" HorizontalAlignment="Center"  Margin="0" Grid.Row="2" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="k1_textBox" Grid.Column="1" HorizontalAlignment="Center"  Margin="0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="k2_textBox" Grid.Column="1" HorizontalAlignment="Center"  Margin="0" Grid.Row="4" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="tR_textBox" Grid.Column="1" HorizontalAlignment="Center"  Margin="0" Grid.Row="5" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="theta_textBox" Grid.Column="1" HorizontalAlignment="Center"  Margin="0" Grid.Row="6" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="M_textBox" Grid.Column="1" HorizontalAlignment="Center"  Margin="0" Grid.Row="7" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="N_textBox" Grid.Column="3" HorizontalAlignment="Center"  Margin="0" Grid.Row="7" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="eps_textBox" Grid.Column="3" HorizontalAlignment="Center"  Margin="0" Grid.Row="6" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="epsa_textBox" Grid.Column="3" HorizontalAlignment="Center" Margin="0" Grid.Row="5" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="qout_textBox" Grid.Column="3" HorizontalAlignment="Center" Margin="0" Grid.Row="4" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="deltat_textBox" Grid.Column="3" HorizontalAlignment="Center"  Margin="0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="deltax_textBox" Grid.Column="3" HorizontalAlignment="Center" Margin="0" Grid.Row="2" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <TextBox x:Name="CBmax_textBox" Grid.Column="3" HorizontalAlignment="Center"  Margin="0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="80" IsEnabled="False"/>
+                        <Label x:Name="label_time" Content="" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="8" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                        <Label x:Name="label_time2" Content="" HorizontalAlignment="Left" Grid.Row="8" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Column="2"/>
+                    </Grid>
+                    <dg2d:DataGrid2D x:Name="dataGrid2D" Grid.Column="0" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"
+                        AlternationCount="2"
+                             UseModifiedDataGridStyle="True"
+                             ItemsSource2D="{Binding double2DArray}"
+                             RowBackground="White"
+                             AlternatingRowBackground="#ebebeb"                       
+                             Background="Transparent">
+                    </dg2d:DataGrid2D>
+                    <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="2">
+                        <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.RowSpan="2" Grid.Column="3">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <!--<RowDefinition Height="1*"/>-->
+                                </Grid.RowDefinitions>
+                                <lvc:CartesianChart x:Name="CAtime" Series="{Binding series1}" Height="250" Zoom="Xy">
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisY>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisX>
+
+                                </lvc:CartesianChart>
+                                <lvc:CartesianChart x:Name="CBtime" Series="{Binding series2}" Grid.Row="1" Height="250" Zoom="Xy">
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisY>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisX>
+                                </lvc:CartesianChart>
+
+                                <lvc:CartesianChart x:Name="CAlen" Series="{Binding series3}" Grid.Row="2" Height="250" Zoom="Xy">
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisY>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisX>
+
+                                </lvc:CartesianChart>
+
+                                <lvc:CartesianChart x:Name="CBlen" Series="{Binding series4}" Grid.Row="3" Height="250" Zoom="Xy">
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisY>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis/>
+                                    </lvc:CartesianChart.AxisX>
+
+                                </lvc:CartesianChart>
+
+                                <!--<Grid x:Name="ChartGrid" Grid.Column="1" Grid.Row="4" Height="500"/>-->
+                                <!--<c1:C1Chart3D x:Name="CB3dChart" Grid.Row="4" Height="500" Grid.Column="1" ChartType="SurfaceZoneContour" >
+                                    <c1:C1Chart3D.Legend>
+                                        <c1:C1Chart3DLegend/>
+                                    </c1:C1Chart3D.Legend>
+                                </c1:C1Chart3D>-->
+                            </Grid>
+                        </ScrollViewer>
+
+                    </Grid>
+                    <GridSplitter x:Name="gridSplitter" HorizontalAlignment="Left" Margin="0" Grid.RowSpan="2" Width="3" Grid.Column="1"/>
+
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
